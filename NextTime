@@ -1,0 +1,93 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+import java.util.regex.*;
+import java.text.*;
+public class solution{
+    static void swap(char ar[], int i, int j)
+    {
+        char temp=ar[i];
+        ar[i]=ar[j];
+        ar[j]=temp;
+    }
+  
+    static void findNext(String value)
+    {
+        boolean isValidTime=false;
+        int n=6;
+        char[] arr=new char[n];
+        
+        String timeValue=value.replace(":","");
+        
+        for(int m=0;m<timeValue.length();m++){
+            arr[m]=timeValue.charAt(m);
+        }
+        int f1=Integer.parseInt(String.valueOf(arr[0]))*10 + Integer.parseInt(String.valueOf(arr[1]));
+        int f2=Integer.parseInt(String.valueOf(arr[2]))*10 + Integer.parseInt(String.valueOf(arr[3]));
+        int f3=Integer.parseInt(String.valueOf(arr[4]))*10 + Integer.parseInt(String.valueOf(arr[5]));
+        if(f1<=23 && f2<=59 && f3<=59){
+            isValidTime=true;
+        }
+        int i;
+        for (i=n-1;i>0;i--){
+            if(arr[i]>arr[i-1]){
+                break;
+            }
+        }
+        if(i==0){
+            if(isValidTime){
+                System.out.println(value);
+            }
+            else{
+                System.out.println("INVALID");
+            }
+            
+        }
+        else{
+            int x=arr[i-1],min=i;
+            for(int j=i+1;j<n;j++){
+                if(arr[j]>x && arr[j]<arr[min]){
+                    min=j;
+                }
+            }
+            swap(arr,i-1,min);
+            Arrays.sort(arr,i,n);
+            
+        f1=Integer.parseInt(String.valueOf(arr[0]))*10 + Integer.parseInt(String.valueOf(arr[1]));
+        f2=Integer.parseInt(String.valueOf(arr[2]))*10 + Integer.parseInt(String.valueOf(arr[3]));
+        f3=Integer.parseInt(String.valueOf(arr[4]))*10 + Integer.parseInt(String.valueOf(arr[5]));
+        boolean  isValid=false;
+        if(f1<=23 && f2<=59 && f3<=59){
+            isValid=true;
+        }
+            if(isValid){
+                //System.out.println(arr);
+                System.out.println(getString(arr));
+            }
+            else{
+                findNext(getString(arr));
+            }
+            
+        }
+    }
+    public static String getString(char arr[]){
+        String str=new String(arr);
+         
+        String output=str.replaceAll("..(?!$)","$0:");
+        return output;
+    } 
+    public static void main(String[] args){
+        Scanner in=new Scanner(System.in);
+        int len=in.nextInt();
+        ArrayList<String> strList=new ArrayList<String>();
+        for (int i=0;i<len;i++){
+            strList.add(in.next());
+        }
+        
+        for (int j=0;j<len;j++){
+            findNext(strList.get(j));
+        }
+        
+    }
+    
+}
