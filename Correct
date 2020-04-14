@@ -1,0 +1,102 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+import java.util.regex.*;
+import java.text.*;
+public class Main{
+    static void swap(char ar[], int i, int j)
+    {
+        char temp=ar[i];
+        ar[i]=ar[j];
+        ar[j]=temp;
+    }
+  
+    static int findNext(String value)
+    {
+        boolean isValidTime=false;
+        int n=6;
+        char[] arr=value.toCharArray();
+        int i;
+        isValidTime=validTime(arr);
+        for (i=n-1;i>0;i--){
+            if(arr[i]>arr[i-1]){
+                break;
+            }
+        }
+        if(i==0){
+           System.out.println(value);
+            return 1;
+        }
+        else{
+            int x=arr[i-1],min=i;
+            for(int j=i+1;j<n;j++){
+                if(arr[j]>x && arr[j]<arr[min]){
+                    min=j;
+                }
+            }
+            swap(arr,i-1,min);
+            Arrays.sort(arr,i,n);
+            
+        
+        
+            if(validTime(arr)){
+                System.out.println(getString(arr));
+                return 0;
+            }
+            else{
+                findNext(getString(arr));
+            }
+            
+        }
+        return 0;
+    }
+    public static String getString(char arr[]){
+        String str=new String(arr);
+         
+        String output=str.replaceAll("..(?!$)","$0:");
+        return output;
+    } 
+    public static boolean validTime(char arr[]){
+        boolean isValidTime=false;
+        
+       
+        int f1=Integer.valueOf(arr[0]+""+arr[1]);
+        
+        int f2=Integer.valueOf(arr[2]+""+arr[3]);
+        
+        int f3=Integer.valueOf(arr[4]+""+arr[5]);
+        
+        // int f1=Character.getNumericValue(arr[0])*10+Character.getNumericValue(arr[1]);
+        // int f2=Character.getNumericValue(arr[2])*10+Character.getNumericValue(arr[3]);
+        // int f3=Character.getNumericValue(arr[4])*10+Character.getNumericValue(arr[5]);
+        System.out.print(arr); System.out.print("-");System.out.print(f1);System.out.print("-");System.out.print(f2);System.out.print("-");System.out.print(f3);System.out.println();
+        if(f1<=23 && f2<=59 && f3<=59){
+            System.out.print(arr); System.out.print("-");System.out.print(f1);System.out.print("-");System.out.print(f2);System.out.print("-");System.out.print(f3);System.out.println();
+            isValidTime=true;
+        }
+        return isValidTime;
+        
+    }
+    public static void main(String[] args){
+        Scanner in=new Scanner(System.in);
+        int len=in.nextInt();
+        ArrayList<String> strList=new ArrayList<String>();
+        for (int i=0;i<len;i++){
+            strList.add(in.next());
+        }
+        
+        for (int j=0;j<len;j++){
+            String timeValue=strList.get(j).replace(":","");
+            if(validTime(timeValue.toCharArray())){
+                if(findNext(timeValue)==1){
+                    System.out.println(strList.get(j));
+                }
+            }
+            else{
+                System.out.println("INVALID");
+            }
+        }
+        
+    }
+    
+}
