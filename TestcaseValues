@@ -1,1 +1,100 @@
 20 12:36:09 01:01:01 24:12:23 03:30:58 12:12:12 01:01:21 01:21:10 11:00:61 09:09:09 06:56:06 06:56:06 00:00:00 23:59:59 11:32:40 04:00:18 04:33:21 15:00:00 02:05:46 12:04:10 03:02:53
+
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+import java.util.regex.*;
+import java.text.*;
+public class Main{
+    static void swap(char ar[], int i, int j)
+    {
+        char temp=ar[i];
+        ar[i]=ar[j];
+        ar[j]=temp;
+    }
+  
+    static int findNext(String value)
+    {
+        boolean isValidTime=false;
+        int n=6;
+        char[] arr=value.toCharArray();
+        int i;
+        isValidTime=validTime(arr);
+        for (i=n-1;i>0;i--){
+            if(arr[i]>arr[i-1]){
+                break;
+            }
+        }
+        if(i==0){
+            return 1;
+        }
+        else{
+            int x=arr[i-1],min=i;
+            for(int j=i+1;j<n;j++){
+                if(arr[j]>x && arr[j]<arr[min]){
+                    min=j;
+                }
+            }
+            swap(arr,i-1,min);
+            Arrays.sort(arr,i,n);
+            if(validTime(arr)){
+                System.out.println(getString(arr));
+                return 0;
+            }
+            else{
+                findNext(new String(arr));
+                 return -1;
+                
+            }
+            
+        }
+        
+    }
+    public static String getString(char arr[]){
+        String str=new String(arr);
+         
+        String output=str.replaceAll("..(?!$)","$0:");
+        return output;
+    } 
+    public static boolean validTime(char arr[]){
+        boolean isValidTime=false;
+        int f1=Integer.valueOf(arr[0]+""+arr[1]);
+        int f2=Integer.valueOf(arr[2]+""+arr[3]);
+        int f3=Integer.valueOf(arr[4]+""+arr[5]);
+        if(f1<=23 && f2<=59 && f3<=59){
+           isValidTime=true;
+        }
+        return isValidTime;
+        
+    }
+    public static void main(String[] args){
+        Scanner in=new Scanner(System.in);
+        int len=in.nextInt();
+        ArrayList<String> strList=new ArrayList<String>();
+        for (int i=0;i<len;i++){
+            strList.add(in.next());
+        }
+        
+        for (int j=0;j<len;j++){
+            String timeValue=strList.get(j).replace(":","");
+             
+            if(validTime(timeValue.toCharArray())){
+                int dec=findNext(timeValue);
+                if(dec==1){
+                    System.out.println(strList.get(j));
+                }
+                else if(dec==-1){
+                    System.out.println(strList.get(j));
+                }
+                
+               
+            }
+            else{
+                System.out.println("INVALID");
+            }
+        }
+        
+    }
+    
+}
